@@ -15,7 +15,7 @@
       font-family: "Segoe UI", Arial, sans-serif;
       background-color: #f4f7fa;
       margin: 0;
-      padding: 40px 20px;
+      padding: 32px 18px;
       color: #1f2937;
     }
 
@@ -23,31 +23,31 @@
       max-width: 1100px;
       margin: 0 auto;
       background-color: #ffffff;
-      padding: 28px;
+      padding: 24px;
       border-radius: 10px;
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
-      margin: 0 0 24px;
+      margin: 0 0 20px;
       text-align: center;
       color: #0d3b66;
-      font-size: 30px;
+      font-size: 28px;
     }
 
     .top-inputs {
       display: grid;
       grid-template-columns: repeat(3, minmax(160px, 1fr));
-      gap: 14px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid #e5e7eb;
+      gap: 12px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .split-inputs {
       display: grid;
       grid-template-columns: repeat(3, minmax(180px, 1fr));
-      gap: 14px;
-      margin-top: 18px;
+      gap: 12px;
+      margin-top: 15px;
     }
 
     .input-group {
@@ -56,7 +56,7 @@
     }
 
     label {
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       font-size: 14px;
       font-weight: 700;
       color: #374151;
@@ -65,7 +65,7 @@
     input,
     select {
       width: 100%;
-      padding: 10px 11px;
+      padding: 9px 10px;
       border: 1px solid #cbd5e1;
       border-radius: 5px;
       font-size: 15px;
@@ -81,15 +81,16 @@
 
     .button-row {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 9px;
+      margin-top: 17px;
     }
 
     button {
-      padding: 11px 20px;
+      min-width: 115px;
+      padding: 10px 18px;
       border: none;
       border-radius: 5px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
     }
@@ -112,20 +113,21 @@
       background-color: #d1d5db;
     }
 
-    .copy-button {
+    .print-button {
       background-color: #1f7a4d;
       color: #ffffff;
     }
 
-    .copy-button:hover {
+    .print-button:hover {
       background-color: #17623d;
     }
 
     .message {
       display: none;
-      margin-top: 18px;
-      padding: 11px 13px;
+      margin-top: 15px;
+      padding: 9px 11px;
       border-radius: 5px;
+      font-size: 14px;
       font-weight: 700;
     }
 
@@ -145,15 +147,15 @@
 
     .results {
       display: none;
-      margin-top: 28px;
+      margin-top: 22px;
     }
 
     .description {
-      margin-bottom: 14px;
-      padding: 12px 15px;
+      margin-bottom: 10px;
+      padding: 10px 13px;
       background-color: #eef3f7;
-      border-left: 5px solid #0d3b66;
-      font-size: 18px;
+      border-left: 4px solid #0d3b66;
+      font-size: 17px;
       font-weight: 800;
       color: #0d3b66;
     }
@@ -164,23 +166,56 @@
 
     table {
       width: 100%;
-      min-width: 950px;
+      min-width: 900px;
       border-collapse: collapse;
+      table-layout: fixed;
     }
 
     th,
     td {
       border: 1px solid #d1d5db;
-      padding: 10px;
+      padding: 8px;
       text-align: left;
       vertical-align: middle;
-      font-size: 14px;
+      font-size: 13.5px;
+      line-height: 1.3;
     }
 
     th {
       background-color: #eaf0f6;
       color: #0d3b66;
       font-weight: 800;
+      white-space: nowrap;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 17%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 24%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 20%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 17%;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 11%;
+    }
+
+    th:nth-child(6),
+    td:nth-child(6) {
+      width: 11%;
     }
 
     td.amount {
@@ -194,8 +229,8 @@
       font-weight: 800;
     }
 
-    .copy-row {
-      margin-top: 16px;
+    .print-row {
+      margin-top: 12px;
       text-align: right;
     }
 
@@ -206,11 +241,128 @@
       }
 
       .container {
-        padding: 20px;
+        padding: 18px;
       }
 
       body {
-        padding: 20px 10px;
+        padding: 18px 10px;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      @page {
+        size: landscape;
+        margin: 0.4in;
+      }
+
+      body {
+        background-color: #ffffff;
+        padding: 0;
+        color: #000000;
+      }
+
+      .container {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      h1,
+      .top-inputs,
+      .split-inputs,
+      .button-row,
+      .message,
+      .print-row {
+        display: none !important;
+      }
+
+      .results {
+        display: block !important;
+        margin: 0;
+      }
+
+      .description {
+        margin: 0 0 10px;
+        padding: 8px 10px;
+        background-color: #eef3f7 !important;
+        border-left: 4px solid #0d3b66;
+        color: #0d3b66 !important;
+        font-size: 16px;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .table-wrapper {
+        overflow: visible;
+      }
+
+      table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        page-break-inside: avoid;
+      }
+
+      th,
+      td {
+        font-size: 11.5px;
+        line-height: 1.2;
+        padding: 6px;
+        overflow-wrap: normal;
+        word-break: normal;
+      }
+
+      th {
+        background-color: #eaf0f6 !important;
+        color: #0d3b66 !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      th:nth-child(1),
+      td:nth-child(1) {
+        width: 17%;
+      }
+
+      th:nth-child(2),
+      td:nth-child(2) {
+        width: 24%;
+      }
+
+      th:nth-child(3),
+      td:nth-child(3) {
+        width: 20%;
+      }
+
+      th:nth-child(4),
+      td:nth-child(4) {
+        width: 17%;
+      }
+
+      th:nth-child(5),
+      td:nth-child(5) {
+        width: 11%;
+      }
+
+      th:nth-child(6),
+      td:nth-child(6) {
+        width: 11%;
+      }
+
+      .total-row td {
+        background-color: #f8fafc !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
       }
     }
   </style>
@@ -339,17 +491,17 @@
           <tbody>
             <tr>
               <td>Hotel Cabana</td>
-              <td>7550 — Digital Marketing</td>
-              <td>600 — Sales &amp; Marketing — Corp</td>
+              <td>7550 - Digital Marketing</td>
+              <td>600 - Sales &amp; Marketing - Corp</td>
               <td>Hotel Cabana All</td>
               <td id="cabanaUsdOutput" class="amount"></td>
               <td id="cabanaEurOutput" class="amount"></td>
             </tr>
 
             <tr>
-              <td>805 — Beachside Hotel</td>
-              <td>2605 — Accrued Marketing — Spend</td>
-              <td>000 — Balance Sheet</td>
+              <td>805 - Beachside Hotel</td>
+              <td>2605 - Accrued Marketing - Spend</td>
+              <td>000 - Balance Sheet</td>
               <td>BKW ALL</td>
               <td id="beachsideUsdOutput" class="amount"></td>
               <td id="beachsideEurOutput" class="amount"></td>
@@ -357,8 +509,8 @@
 
             <tr>
               <td>KHE</td>
-              <td>7550 — Digital Marketing</td>
-              <td>600 — Sales &amp; Marketing — Corp</td>
+              <td>7550 - Digital Marketing</td>
+              <td>600 - Sales &amp; Marketing - Corp</td>
               <td>Key Haven Tenant LLC</td>
               <td id="kheUsdOutput" class="amount"></td>
               <td id="kheEurOutput" class="amount"></td>
@@ -373,13 +525,13 @@
         </table>
       </div>
 
-      <div class="copy-row">
+      <div class="print-row">
         <button
           type="button"
-          class="copy-button"
-          onclick="copyResults()"
+          class="print-button"
+          onclick="printCoding()"
         >
-          Copy Coding
+          Print / Save as PDF
         </button>
       </div>
 
@@ -388,7 +540,7 @@
   </div>
 
   <script>
-    let copyText = "";
+    let calculationComplete = false;
 
     function getNumber(id) {
       const value = parseFloat(document.getElementById(id).value);
@@ -441,11 +593,13 @@
 
       if (!month) {
         showMessage("Select the month.", "error");
+        calculationComplete = false;
         return;
       }
 
       if (!year) {
         showMessage("Enter the year.", "error");
+        calculationComplete = false;
         return;
       }
 
@@ -454,18 +608,8 @@
           "Enter a valid EUR transaction total.",
           "error"
         );
-        return;
-      }
 
-      if (
-        cabanaUsd < 0 ||
-        beachsideUsd < 0 ||
-        kheUsd < 0
-      ) {
-        showMessage(
-          "USD amounts cannot be negative.",
-          "error"
-        );
+        calculationComplete = false;
         return;
       }
 
@@ -478,6 +622,8 @@
           "Enter at least one USD entity amount.",
           "error"
         );
+
+        calculationComplete = false;
         return;
       }
 
@@ -529,31 +675,9 @@
       document.getElementById("eurTotalOutput").textContent =
         formatEur(eurSplitTotal);
 
-      copyText =
-`${description}
-
-Amount: ${cabanaEur.toFixed(2)}
-GL: 7550 - Digital Marketing
-Department: 600 - Sales & Marketing - Corp
-Entity: Hotel Cabana
-Unit / Market: Hotel Cabana All
-
-Amount: ${beachsideEur.toFixed(2)}
-GL: 2605 - Accrued Marketing - Spend
-Department: 000 - Balance Sheet
-Entity: 805 - Beachside Hotel
-Unit / Market: BKW ALL
-
-Amount: ${kheEur.toFixed(2)}
-GL: 7550 - Digital Marketing
-Department: 600 - Sales & Marketing - Corp
-Entity: KHE
-Unit / Market: Key Haven Tenant LLC
-
-USD Reference Total: ${usdTotal.toFixed(2)}
-EUR Transaction Total: ${eurSplitTotal.toFixed(2)}`;
-
       document.getElementById("results").style.display = "block";
+
+      calculationComplete = true;
 
       showMessage(
         "The USD total was calculated automatically, and the EUR amounts match the transaction total.",
@@ -561,38 +685,17 @@ EUR Transaction Total: ${eurSplitTotal.toFixed(2)}`;
       );
     }
 
-    async function copyResults() {
-      if (!copyText) {
+    function printCoding() {
+      if (!calculationComplete) {
         showMessage(
-          "Calculate the split before copying.",
+          "Calculate the split before printing.",
           "error"
         );
+
         return;
       }
 
-      try {
-        await navigator.clipboard.writeText(copyText);
-
-        showMessage(
-          "The coding was copied.",
-          "success"
-        );
-      } catch (error) {
-        const temporaryTextArea =
-          document.createElement("textarea");
-
-        temporaryTextArea.value = copyText;
-        document.body.appendChild(temporaryTextArea);
-        temporaryTextArea.select();
-
-        document.execCommand("copy");
-        document.body.removeChild(temporaryTextArea);
-
-        showMessage(
-          "The coding was copied.",
-          "success"
-        );
-      }
+      window.print();
     }
 
     function clearForm() {
@@ -605,7 +708,7 @@ EUR Transaction Total: ${eurSplitTotal.toFixed(2)}`;
 
       document.getElementById("results").style.display = "none";
 
-      copyText = "";
+      calculationComplete = false;
 
       hideMessage();
     }
