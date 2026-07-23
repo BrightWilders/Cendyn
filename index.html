@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Cendyn Currency Split</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 40px 20px;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 28px;
+      border-radius: 10px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      text-align: center;
+      color: #0d3b66;
+      font-size: 30px;
+    }
+
+    .top-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 14px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .split-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      font-size: 15px;
+      background-color: #ffffff;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #0d3b66;
+      box-shadow: 0 0 0 2px rgba(13, 59, 102, 0.12);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 11px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .calculate-button {
+      background-color: #0d3b66;
+      color: #ffffff;
+    }
+
+    .calculate-button:hover {
+      background-color: #092b4b;
+    }
+
+    .clear-button {
+      background-color: #e5e7eb;
+      color: #1f2937;
+    }
+
+    .clear-button:hover {
+      background-color: #d1d5db;
+    }
+
+    .copy-button {
+      background-color: #1f7a4d;
+      color: #ffffff;
+    }
+
+    .copy-button:hover {
+      background-color: #17623d;
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 11px 13px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+
+    .message.success {
+      display: block;
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .message.error {
+      display: block;
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .results {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .description {
+      margin-bottom: 14px;
+      padding: 12px 15px;
+      background-color: #eef3f7;
+      border-left: 5px solid #0d3b66;
+      font-size: 18px;
+      font-weight: 800;
+      color: #0d3b66;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #d1d5db;
+      padding: 10px;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #eaf0f6;
+      color: #0d3b66;
+      font-weight: 800;
+    }
+
+    td.amount {
+      text-align: right;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .total-row td {
+      background-color: #f8fafc;
+      font-weight: 800;
+    }
+
+    .copy-row {
+      margin-top: 16px;
+      text-align: right;
+    }
+
+    @media (max-width: 850px) {
+      .top-inputs,
+      .split-inputs {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      body {
+        padding: 20px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Cendyn Currency Split</h1>
+
+    <div class="top-inputs">
+
+      <div class="input-group">
+        <label for="month">Month</label>
+        <select id="month">
+          <option value="">Select Month</option>
+          <option value="January">January</option>
+          <option value="February">February</option>
+          <option value="March">March</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+          <option value="August">August</option>
+          <option value="September">September</option>
+          <option value="October">October</option>
+          <option value="November">November</option>
+          <option value="December">December</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="year">Year</label>
+        <input
+          type="number"
+          id="year"
+          value="2026"
+          min="2020"
+          max="2100"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="eurTotal">EUR Transaction Total</label>
+        <input
+          type="number"
+          id="eurTotal"
+          step="0.01"
+          min="0"
+          placeholder="3690.16"
+        />
+      </div>
+
+    </div>
+
+    <div class="split-inputs">
+
+      <div class="input-group">
+        <label for="beachsideUsd">Beachside Hotel — USD</label>
+        <input
+          type="number"
+          id="beachsideUsd"
+          step="0.01"
+          min="0"
+          placeholder="408.19"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="cabanaUsd">Hotel Cabana — USD</label>
+        <input
+          type="number"
+          id="cabanaUsd"
+          step="0.01"
+          min="0"
+          placeholder="3677.86"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="kheUsd">Key Haven — USD</label>
+        <input
+          type="number"
+          id="kheUsd"
+          step="0.01"
+          min="0"
+          placeholder="180.00"
+        />
+      </div>
+
+    </div>
+
+    <div class="button-row">
+      <button
+        type="button"
+        class="calculate-button"
+        onclick="calculateSplit()"
+      >
+        Calculate
+      </button>
+
+      <button
+        type="button"
+        class="clear-button"
+        onclick="clearForm()"
+      >
+        Clear
+      </button>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="results" class="results">
+
+      <div id="description" class="description"></div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Entity</th>
+              <th>GL</th>
+              <th>Department</th>
+              <th>Unit / Market</th>
+              <th>USD Reference</th>
+              <th>EUR Amount</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>805 — Beachside Hotel</td>
+              <td>2605 — Accrued Marketing — Spend</td>
+              <td>000 — Balance Sheet</td>
+              <td>BKW ALL</td>
+              <td id="beachsideUsdOutput" class="amount"></td>
+              <td id="beachsideEurOutput" class="amount"></td>
+            </tr>
+
+            <tr>
+              <td>Hotel Cabana</td>
+              <td>7550 — Digital Marketing</td>
+              <td>600 — Sales &amp; Marketing — Corp</td>
+              <td>Hotel Cabana All</td>
+              <td id="cabanaUsdOutput" class="amount"></td>
+              <td id="cabanaEurOutput" class="amount"></td>
+            </tr>
+
+            <tr>
+              <td>KHE</td>
+              <td>7550 — Digital Marketing</td>
+              <td>600 — Sales &amp; Marketing — Corp</td>
+              <td>Key Haven Tenant LLC</td>
+              <td id="kheUsdOutput" class="amount"></td>
+              <td id="kheEurOutput" class="amount"></td>
+            </tr>
+
+            <tr class="total-row">
+              <td colspan="4">Total</td>
+              <td id="usdTotalOutput" class="amount"></td>
+              <td id="eurTotalOutput" class="amount"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="copy-row">
+        <button
+          type="button"
+          class="copy-button"
+          onclick="copyResults()"
+        >
+          Copy Coding
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let copyText = "";
+
+    function getNumber(id) {
+      const value = parseFloat(document.getElementById(id).value);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function roundCurrency(value) {
+      return Math.round((value + Number.EPSILON) * 100) / 100;
+    }
+
+    function formatUsd(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(value);
+    }
+
+    function formatEur(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "EUR"
+      }).format(value);
+    }
+
+    function showMessage(text, type) {
+      const message = document.getElementById("message");
+
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    function hideMessage() {
+      const message = document.getElementById("message");
+
+      message.textContent = "";
+      message.className = "message";
+    }
+
+    function calculateSplit() {
+      hideMessage();
+
+      const month = document.getElementById("month").value;
+      const year = document.getElementById("year").value.trim();
+
+      const eurTotal = getNumber("eurTotal");
+
+      const beachsideUsd = getNumber("beachsideUsd");
+      const cabanaUsd = getNumber("cabanaUsd");
+      const kheUsd = getNumber("kheUsd");
+
+      if (!month) {
+        showMessage("Select the month.", "error");
+        return;
+      }
+
+      if (!year) {
+        showMessage("Enter the year.", "error");
+        return;
+      }
+
+      if (eurTotal <= 0) {
+        showMessage(
+          "Enter a valid EUR transaction total.",
+          "error"
+        );
+        return;
+      }
+
+      if (
+        beachsideUsd < 0 ||
+        cabanaUsd < 0 ||
+        kheUsd < 0
+      ) {
+        showMessage(
+          "USD amounts cannot be negative.",
+          "error"
+        );
+        return;
+      }
+
+      /*
+        The USD total is calculated automatically
+        from the three entity amounts.
+      */
+      const usdTotal = roundCurrency(
+        beachsideUsd + cabanaUsd + kheUsd
+      );
+
+      if (usdTotal <= 0) {
+        showMessage(
+          "Enter at least one USD entity amount.",
+          "error"
+        );
+        return;
+      }
+
+      /*
+        This calculates how much EUR equals one USD
+        based on the EUR total and calculated USD total.
+      */
+      const exchangeRate = eurTotal / usdTotal;
+
+      /*
+        Calculate the first two EUR amounts using
+        their percentage of the calculated USD total.
+      */
+      const beachsideEur = roundCurrency(
+        beachsideUsd * exchangeRate
+      );
+
+      const cabanaEur = roundCurrency(
+        cabanaUsd * exchangeRate
+      );
+
+      /*
+        The final Key Haven amount uses the remaining EUR
+        balance so all three lines equal the exact EUR total.
+      */
+      const kheEur = roundCurrency(
+        eurTotal - beachsideEur - cabanaEur
+      );
+
+      const eurSplitTotal = roundCurrency(
+        beachsideEur + cabanaEur + kheEur
+      );
+
+      const description =
+        "Ad Spend - " + month + " " + year;
+
+      document.getElementById("description").textContent =
+        description;
+
+      document.getElementById("beachsideUsdOutput").textContent =
+        formatUsd(beachsideUsd);
+
+      document.getElementById("beachsideEurOutput").textContent =
+        formatEur(beachsideEur);
+
+      document.getElementById("cabanaUsdOutput").textContent =
+        formatUsd(cabanaUsd);
+
+      document.getElementById("cabanaEurOutput").textContent =
+        formatEur(cabanaEur);
+
+      document.getElementById("kheUsdOutput").textContent =
+        formatUsd(kheUsd);
+
+      document.getElementById("kheEurOutput").textContent =
+        formatEur(kheEur);
+
+      document.getElementById("usdTotalOutput").textContent =
+        formatUsd(usdTotal);
+
+      document.getElementById("eurTotalOutput").textContent =
+        formatEur(eurSplitTotal);
+
+      copyText =
+`${description}
+
+Amount: ${beachsideEur.toFixed(2)}
+GL: 2605 - Accrued Marketing - Spend
+Department: 000 - Balance Sheet
+Entity: 805 - Beachside Hotel
+Unit / Market: BKW ALL
+
+Amount: ${cabanaEur.toFixed(2)}
+GL: 7550 - Digital Marketing
+Department: 600 - Sales & Marketing - Corp
+Entity: Hotel Cabana
+Unit / Market: Hotel Cabana All
+
+Amount: ${kheEur.toFixed(2)}
+GL: 7550 - Digital Marketing
+Department: 600 - Sales & Marketing - Corp
+Entity: KHE
+Unit / Market: Key Haven Tenant LLC
+
+USD Reference Total: ${usdTotal.toFixed(2)}
+EUR Transaction Total: ${eurSplitTotal.toFixed(2)}`;
+
+      document.getElementById("results").style.display = "block";
+
+      showMessage(
+        "The USD total was calculated automatically, and the EUR amounts match the transaction total.",
+        "success"
+      );
+    }
+
+    async function copyResults() {
+      if (!copyText) {
+        showMessage(
+          "Calculate the split before copying.",
+          "error"
+        );
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(copyText);
+
+        showMessage(
+          "The coding was copied.",
+          "success"
+        );
+      } catch (error) {
+        const temporaryTextArea =
+          document.createElement("textarea");
+
+        temporaryTextArea.value = copyText;
+        document.body.appendChild(temporaryTextArea);
+        temporaryTextArea.select();
+
+        document.execCommand("copy");
+        document.body.removeChild(temporaryTextArea);
+
+        showMessage(
+          "The coding was copied.",
+          "success"
+        );
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("month").value = "";
+      document.getElementById("year").value = "2026";
+      document.getElementById("eurTotal").value = "";
+      document.getElementById("beachsideUsd").value = "";
+      document.getElementById("cabanaUsd").value = "";
+      document.getElementById("kheUsd").value = "";
+
+      document.getElementById("results").style.display = "none";
+
+      copyText = "";
+
+      hideMessage();
+    }
+  </script>
+</body>
+</html>
