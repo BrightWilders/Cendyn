@@ -260,7 +260,6 @@
           id="eurTotal"
           step="0.01"
           min="0"
-          placeholder="3690.16"
         />
       </div>
 
@@ -269,35 +268,32 @@
     <div class="split-inputs">
 
       <div class="input-group">
-        <label for="beachsideUsd">Beachside Hotel — USD</label>
-        <input
-          type="number"
-          id="beachsideUsd"
-          step="0.01"
-          min="0"
-          placeholder="408.19"
-        />
-      </div>
-
-      <div class="input-group">
-        <label for="cabanaUsd">Hotel Cabana — USD</label>
+        <label for="cabanaUsd">Hotel Cabana (USD)</label>
         <input
           type="number"
           id="cabanaUsd"
           step="0.01"
           min="0"
-          placeholder="3677.86"
         />
       </div>
 
       <div class="input-group">
-        <label for="kheUsd">Key Haven — USD</label>
+        <label for="beachsideUsd">Beachside Hotel (USD)</label>
+        <input
+          type="number"
+          id="beachsideUsd"
+          step="0.01"
+          min="0"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="kheUsd">KHE / Lunara Bay (USD)</label>
         <input
           type="number"
           id="kheUsd"
           step="0.01"
           min="0"
-          placeholder="180.00"
         />
       </div>
 
@@ -342,21 +338,21 @@
 
           <tbody>
             <tr>
-              <td>805 — Beachside Hotel</td>
-              <td>2605 — Accrued Marketing — Spend</td>
-              <td>000 — Balance Sheet</td>
-              <td>BKW ALL</td>
-              <td id="beachsideUsdOutput" class="amount"></td>
-              <td id="beachsideEurOutput" class="amount"></td>
-            </tr>
-
-            <tr>
               <td>Hotel Cabana</td>
               <td>7550 — Digital Marketing</td>
               <td>600 — Sales &amp; Marketing — Corp</td>
               <td>Hotel Cabana All</td>
               <td id="cabanaUsdOutput" class="amount"></td>
               <td id="cabanaEurOutput" class="amount"></td>
+            </tr>
+
+            <tr>
+              <td>805 — Beachside Hotel</td>
+              <td>2605 — Accrued Marketing — Spend</td>
+              <td>000 — Balance Sheet</td>
+              <td>BKW ALL</td>
+              <td id="beachsideUsdOutput" class="amount"></td>
+              <td id="beachsideEurOutput" class="amount"></td>
             </tr>
 
             <tr>
@@ -439,8 +435,8 @@
 
       const eurTotal = getNumber("eurTotal");
 
-      const beachsideUsd = getNumber("beachsideUsd");
       const cabanaUsd = getNumber("cabanaUsd");
+      const beachsideUsd = getNumber("beachsideUsd");
       const kheUsd = getNumber("kheUsd");
 
       if (!month) {
@@ -462,8 +458,8 @@
       }
 
       if (
-        beachsideUsd < 0 ||
         cabanaUsd < 0 ||
+        beachsideUsd < 0 ||
         kheUsd < 0
       ) {
         showMessage(
@@ -473,12 +469,8 @@
         return;
       }
 
-      /*
-        The USD total is calculated automatically
-        from the three entity amounts.
-      */
       const usdTotal = roundCurrency(
-        beachsideUsd + cabanaUsd + kheUsd
+        cabanaUsd + beachsideUsd + kheUsd
       );
 
       if (usdTotal <= 0) {
@@ -489,34 +481,22 @@
         return;
       }
 
-      /*
-        This calculates how much EUR equals one USD
-        based on the EUR total and calculated USD total.
-      */
       const exchangeRate = eurTotal / usdTotal;
-
-      /*
-        Calculate the first two EUR amounts using
-        their percentage of the calculated USD total.
-      */
-      const beachsideEur = roundCurrency(
-        beachsideUsd * exchangeRate
-      );
 
       const cabanaEur = roundCurrency(
         cabanaUsd * exchangeRate
       );
 
-      /*
-        The final Key Haven amount uses the remaining EUR
-        balance so all three lines equal the exact EUR total.
-      */
+      const beachsideEur = roundCurrency(
+        beachsideUsd * exchangeRate
+      );
+
       const kheEur = roundCurrency(
-        eurTotal - beachsideEur - cabanaEur
+        eurTotal - cabanaEur - beachsideEur
       );
 
       const eurSplitTotal = roundCurrency(
-        beachsideEur + cabanaEur + kheEur
+        cabanaEur + beachsideEur + kheEur
       );
 
       const description =
@@ -525,17 +505,17 @@
       document.getElementById("description").textContent =
         description;
 
-      document.getElementById("beachsideUsdOutput").textContent =
-        formatUsd(beachsideUsd);
-
-      document.getElementById("beachsideEurOutput").textContent =
-        formatEur(beachsideEur);
-
       document.getElementById("cabanaUsdOutput").textContent =
         formatUsd(cabanaUsd);
 
       document.getElementById("cabanaEurOutput").textContent =
         formatEur(cabanaEur);
+
+      document.getElementById("beachsideUsdOutput").textContent =
+        formatUsd(beachsideUsd);
+
+      document.getElementById("beachsideEurOutput").textContent =
+        formatEur(beachsideEur);
 
       document.getElementById("kheUsdOutput").textContent =
         formatUsd(kheUsd);
@@ -552,17 +532,17 @@
       copyText =
 `${description}
 
-Amount: ${beachsideEur.toFixed(2)}
-GL: 2605 - Accrued Marketing - Spend
-Department: 000 - Balance Sheet
-Entity: 805 - Beachside Hotel
-Unit / Market: BKW ALL
-
 Amount: ${cabanaEur.toFixed(2)}
 GL: 7550 - Digital Marketing
 Department: 600 - Sales & Marketing - Corp
 Entity: Hotel Cabana
 Unit / Market: Hotel Cabana All
+
+Amount: ${beachsideEur.toFixed(2)}
+GL: 2605 - Accrued Marketing - Spend
+Department: 000 - Balance Sheet
+Entity: 805 - Beachside Hotel
+Unit / Market: BKW ALL
 
 Amount: ${kheEur.toFixed(2)}
 GL: 7550 - Digital Marketing
@@ -619,8 +599,8 @@ EUR Transaction Total: ${eurSplitTotal.toFixed(2)}`;
       document.getElementById("month").value = "";
       document.getElementById("year").value = "2026";
       document.getElementById("eurTotal").value = "";
-      document.getElementById("beachsideUsd").value = "";
       document.getElementById("cabanaUsd").value = "";
+      document.getElementById("beachsideUsd").value = "";
       document.getElementById("kheUsd").value = "";
 
       document.getElementById("results").style.display = "none";
